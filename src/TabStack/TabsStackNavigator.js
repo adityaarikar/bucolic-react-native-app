@@ -3,7 +3,6 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreenNavigator from './HomeScreenNavigator';
 import DevicesScreenNavigator from './DevicesScreenNavigator';
-import ProfileScreenNavigator from './ProfileScreenNavigator';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import constants from '../constants';
 

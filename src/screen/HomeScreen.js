@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, Button, Image} from 'react-native';
 import React from 'react';
 import constants from '../constants';
+import CustomButton from '../components/CustomButton';
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -12,7 +13,7 @@ const HomeScreen = ({navigation}) => {
           width={150}
           height={150}
         />
-        <Text style={styles.title}>Kalpvariksh</Text>
+        <Text style={styles.title}>Bucolic Kailash</Text>
       </View>
       <View style={styles.bottom}>
         <Image
@@ -21,10 +22,9 @@ const HomeScreen = ({navigation}) => {
           width={200}
           height={250}
         />
-        <Button
-          style={styles.bottomButton}
+
+        <CustomButton
           title="Add Device"
-          color={constants.primary}
           onPress={() => {
             navigation.navigate('AddDeviceScreen');
           }}
@@ -36,8 +36,9 @@ const HomeScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    width: '100%',
-    height: '100%',
+    // backgroundColor: 'grey',
+    // width: '100%',
+    // height: '100%',
     display: 'flex',
     alignItems: 'center',
   },
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
   bottom: {
     height: '65%',
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   bottomImage: {

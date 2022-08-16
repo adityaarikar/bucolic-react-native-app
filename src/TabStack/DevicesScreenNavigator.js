@@ -10,12 +10,21 @@ const Stack = createStackNavigator();
 const DevicesScreenNavigator = () => {
   return (
     <Stack.Navigator initialRouteName="DevicesScreen">
-      <Stack.Screen name="All Devices" component={DevicesScreen} />
+      <Stack.Screen
+        name="All Devices"
+        component={DevicesScreen}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="IndividualDeviceScreen"
         component={IndividualDeviceScreen}
+        options={{headerShown: false}}
       />
-      <Stack.Screen name="TimeSettingScreen" component={TimeSettingScreen} />
+      <Stack.Screen
+        name="TimeSettingScreen"
+        component={TimeSettingScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

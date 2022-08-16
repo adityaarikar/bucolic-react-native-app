@@ -1,75 +1,126 @@
-import {StyleSheet, Text, View, Button, Switch} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
-import constants from '../constants';
 import DisplayContainer from '../components/DisplayContainer';
+import CustomHeader from '../components/CustomHeader';
+import CustomButton from '../components/CustomButton';
+import ReadingDisplay from '../components/ReadingDisplay';
+import constants from '../constants';
+import TimeUpdateContainer from '../components/TimeUpdateContainer';
 
 const IndividualDeviceScreen = props => {
   const deviceIP = props.route.params.deviceIP;
-  const [isLedOn, setisLedOn] = useState(false);
-  const toggleLed = () => {
-    if (isLedOn) {
-      const res = fetch(`http://${deviceIP}/ledoff`);
-      setisLedOn(false);
-      console.log('LED is OFF');
-    } else {
-      const res = fetch(`http://${deviceIP}/ledon`);
-      setisLedOn(true);
-      console.log('LED is ON');
-    }
-  };
+  const deviceName = props.route.params.deviceName;
+  const [data, setData] = useState({
+    airQual: 0,
+    device: 'OXY',
+    fanOff: '00.0',
+    fanOffTime: '00.0',
+    fanOn: '00.0',
+    fanOnTime: '00.0',
+    humid: 0,
+    ip: '192.168.43.29',
+    lightOff: '00.0',
+    lightOffTime: '00.0',
+    lightOn: '00.0',
+    lightOnTime: '00.0',
+    temp: 0,
+    waterL: '00.0',
+    waterOff: '00.0',
+    waterOffTime: '00.0',
+    waterOn: '00.0',
+    waterOnTime: '00.0',
+  });
 
-  const [isFanON, setIsFanOn] = useState(false);
-  const toggleFan = () => {
-    if (isLedOn) {
-      fetch(`http://${deviceIP}/fanoff`);
-      setIsFanOn(false);
-      console.log('FAN is OFF');
-    } else {
-      fetch(`http://${deviceIP}/fanon`);
-      setIsFanOn(true);
-      console.log('FAN is ON');
-    }
-  };
+  // const fetchData = async () => {
+  //   //http://192.168.43.29/getData
+  //   const responce = await axios.get(`http://${deviceIP}/getData`);
+  //   setUpdate(!update);
+  //   setData(responce.data);
+  // };
+
+  // useEffect(() => {
+  //   let handle = setInterval(fetchData, 500);
+
+  //   return () => {
+  //     clearInterval(handle);
+  //   };
+  // }, [update]);
 
   return (
     <View style={styles.main}>
-      <DisplayContainer style={styles.displayContainer} />
-      <View style={styles.buttonContainer}>
-        <Button
-          style={styles.button}
-          title="Water"
-          color={constants.primary}
-          onPress={() => {
-            props.navigation.navigate('TimeSettingScreen', {
-              name: 'Water Time Settings',
-            });
-          }}
+      <CustomHeader
+        isBack={true}
+        title={deviceName}
+        onPress={props.navigation}
+      />
+      <ScrollView>
+        <DisplayContainer responce={data} />
+        <View style={styles.buttonContainer}>
+          <CustomButton
+            title="Water Control"
+            onPress={() => {
+              props.navigation.navigate('TimeSettingScreen', {
+                deviceIP: deviceIP,
+                title: 'Spray',
+                name: 'Water Time Settings',
+                setting: 'spray',
+              });
+            }}
+          />
+          <CustomButton
+            title="Fan Control"
+            onPress={() => {
+              props.navigation.navigate('TimeSettingScreen', {
+                deviceIP: deviceIP,
+                title: 'Fan',
+                name: 'Fan Time Settings',
+                setting: 'fan',
+              });
+            }}
+          />
+          <CustomButton
+            title="Light Control"
+            onPress={() => {
+              props.navigation.navigate('TimeSettingScreen', {
+                deviceIP: deviceIP,
+                title: 'Light',
+                name: 'Light Time Settings',
+                setting: 'light',
+              });
+            }}
+          />
+          <CustomButton
+            title="Reset System"
+            // onPress={() => {
+            //   props.navigation.navigate('TimeSettingScreen', {
+            //     name: 'Fan Time Settings',
+            //   });
+            // }}
+          />
+        </View>
+        <TimeUpdateContainer
+          title="Light Time Update"
+          onTitle="Last Light ON"
+          onValue={data.lightOnTime}
+          offTitle="Last Light OFF"
+          offValue={data.lightOffTime}
         />
-        <Button
-          title="Fan"
-          color={constants.primary}
-          onPress={() => {
-            props.navigation.navigate('TimeSettingScreen', {
-              name: 'Fan Time Settings',
-            });
-          }}
+        <TimeUpdateContainer
+          title="Fan Time Update"
+          onTitle="Last Fan ON"
+          onValue={data.fanOnTime}
+          offTitle="Last Fan OFF"
+          offValue={data.fanOffTime}
         />
-        <Button
-          title="Light"
-          color={constants.primary}
-          onPress={() => {
-            props.navigation.navigate('TimeSettingScreen', {
-              name: 'Light Time Settings',
-            });
-          }}
+        <TimeUpdateContainer
+          title="Water Time Update"
+          onTitle="Last Water ON"
+          onValue={data.waterOnTime}
+          offTitle="Last Water OFF"
+          offValue={data.waterOffTime}
         />
-        <Button
-          title="Reset"
-          color={constants.primary}
-          // onPress={}
-        />
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -78,14 +129,10 @@ export default IndividualDeviceScreen;
 
 const styles = StyleSheet.create({
   main: {
-    width: '100%',
-    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  displayContainer: {
-    width: '90%',
+    height: '100%',
   },
   buttonContainer: {
     width: '100%',

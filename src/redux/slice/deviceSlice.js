@@ -12,20 +12,19 @@ export const deviceSlice = createSlice({
       const newDevice = {
         deviceName: action.payload.deviceName,
         deviceIP: action.payload.deviceIP,
+        deviceType: action.payload.deviceType,
       };
       state.devices.push(newDevice);
     },
     deleteDevice: (state, action) => {
-      return {
-        ...state,
-        device: state.devices.filter(
-          device => device.deviceName != action.payload.deviceName,
-        ),
-      };
+      const deviceToRemoveName = action.payload;
+      state.devices = state.devices.filter(
+        device => device.deviceName !== deviceToRemoveName,
+      );
     },
   },
 });
 
-export const {addDevice} = deviceSlice.actions;
+export const {addDevice, deleteDevice} = deviceSlice.actions;
 
 export default deviceSlice.reducer;

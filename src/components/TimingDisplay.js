@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import constants from '../constants';
 
-const TimingDisplay = () => {
+const TimingDisplay = props => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
@@ -18,10 +19,10 @@ const TimingDisplay = () => {
           <Text style={styles.headingTitle}>Light</Text>
         </View>
         <View style={styles.timeHeading}>
-          <Text style={styles.timeValue}>2:30</Text>
+          <Text style={styles.timeValue}>{props.lightOn}</Text>
         </View>
         <View style={styles.timeHeading}>
-          <Text style={styles.timeValue}>3:30</Text>
+          <Text style={styles.timeValue}>{props.lightOff}</Text>
         </View>
       </View>
       <View style={styles.innerContainer}>
@@ -29,10 +30,10 @@ const TimingDisplay = () => {
           <Text style={styles.headingTitle}>Fan</Text>
         </View>
         <View style={styles.timeHeading}>
-          <Text style={styles.timeValue}>2:30</Text>
+          <Text style={styles.timeValue}>{props.fanOn}</Text>
         </View>
         <View style={styles.timeHeading}>
-          <Text style={styles.timeValue}>3:30</Text>
+          <Text style={styles.timeValue}>{props.fanOff}</Text>
         </View>
       </View>
       <View style={styles.innerContainer}>
@@ -40,10 +41,10 @@ const TimingDisplay = () => {
           <Text style={styles.headingTitle}>Water</Text>
         </View>
         <View style={styles.timeHeading}>
-          <Text style={styles.timeValue}>2:30</Text>
+          <Text style={styles.timeValue}>{props.waterOn}</Text>
         </View>
         <View style={styles.timeHeading}>
-          <Text style={styles.timeValue}>3:30</Text>
+          <Text style={styles.timeValue}>{props.waterOff}</Text>
         </View>
       </View>
     </View>
@@ -74,14 +75,17 @@ const styles = StyleSheet.create({
   timeHeadingTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: constants.black,
   },
   headingTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: constants.black,
   },
   timeValue: {
     textAlign: 'center',
     width: 80,
     fontWeight: 'bold',
+    color: constants.black,
   },
 });
