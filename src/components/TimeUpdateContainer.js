@@ -11,12 +11,12 @@ const TimeUpdateContainer = props => {
       </View>
       <View style={styles.timeValueMain}>
         <ReadingDisplay
-          style={{width: '85%'}}
+          //   style={{width: '%'}}
           title={props.onTitle}
           value={props.onValue}
         />
         <ReadingDisplay
-          style={{width: '85%'}}
+          //   style={{width: '85%'}}
           title={props.offTitle}
           value={props.offValue}
         />
@@ -38,13 +38,15 @@ const styles = StyleSheet.create({
     borderColor: constants.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
   },
   timeDisplayContainer: {
     width: '100%',
     backgroundColor: constants.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     padding: 10,
     alignItems: 'center',
     borderColor: constants.primary,
@@ -57,6 +59,8 @@ const styles = StyleSheet.create({
   timeValueMain: {
     width: '100%',
     display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
   },

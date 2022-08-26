@@ -4,9 +4,8 @@ import {useState} from 'react';
 import DisplayContainer from '../components/DisplayContainer';
 import CustomHeader from '../components/CustomHeader';
 import CustomButton from '../components/CustomButton';
-import ReadingDisplay from '../components/ReadingDisplay';
-import constants from '../constants';
 import TimeUpdateContainer from '../components/TimeUpdateContainer';
+import axios from 'axios';
 
 const IndividualDeviceScreen = props => {
   const deviceIP = props.route.params.deviceIP;
@@ -32,20 +31,19 @@ const IndividualDeviceScreen = props => {
     waterOnTime: '00.0',
   });
 
-  // const fetchData = async () => {
-  //   //http://192.168.43.29/getData
-  //   const responce = await axios.get(`http://${deviceIP}/getData`);
-  //   setUpdate(!update);
-  //   setData(responce.data);
-  // };
+  const fetchData = async () => {
+    //http://192.168.43.29/getData
+    const responce = await axios.get(`http://${deviceIP}/getData`);
+    setData(responce.data);
+  };
 
-  // useEffect(() => {
-  //   let handle = setInterval(fetchData, 500);
+  useEffect(() => {
+    let handle = setInterval(fetchData, 500);
 
-  //   return () => {
-  //     clearInterval(handle);
-  //   };
-  // }, [update]);
+    return () => {
+      clearInterval(handle);
+    };
+  }, []);
 
   return (
     <View style={styles.main}>
@@ -67,6 +65,8 @@ const IndividualDeviceScreen = props => {
                 setting: 'spray',
               });
             }}
+            icon={true}
+            nameIcon="water"
           />
           <CustomButton
             title="Fan Control"
@@ -78,6 +78,8 @@ const IndividualDeviceScreen = props => {
                 setting: 'fan',
               });
             }}
+            icon={true}
+            nameIcon="fan"
           />
           <CustomButton
             title="Light Control"
@@ -89,6 +91,8 @@ const IndividualDeviceScreen = props => {
                 setting: 'light',
               });
             }}
+            icon={true}
+            nameIcon="lightbulb-on"
           />
           <CustomButton
             title="Reset System"
@@ -97,6 +101,8 @@ const IndividualDeviceScreen = props => {
             //     name: 'Fan Time Settings',
             //   });
             // }}
+            icon={true}
+            nameIcon="reload"
           />
         </View>
         <TimeUpdateContainer
