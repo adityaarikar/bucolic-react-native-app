@@ -1,4 +1,10 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useEffect} from 'react';
 import {useState} from 'react';
 import DisplayContainer from '../components/DisplayContainer';
@@ -7,7 +13,17 @@ import CustomButton from '../components/CustomButton';
 import TimeUpdateContainer from '../components/TimeUpdateContainer';
 import axios from 'axios';
 
+const LoadingComponent = () => {
+  return (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color="#00ff00" />
+      <Text>Loading....</Text>
+    </View>
+  );
+};
+
 const IndividualDeviceScreen = props => {
+  const [loading, setLoading] = useState(true);
   const deviceIP = props.route.params.deviceIP;
   const deviceName = props.route.params.deviceName;
   const [data, setData] = useState({
@@ -33,8 +49,13 @@ const IndividualDeviceScreen = props => {
 
   const fetchData = async () => {
     //http://192.168.43.29/getData
-    const responce = await axios.get(`http://${deviceIP}/getData`);
-    setData(responce.data);
+    try {
+      const responce = await axios.get(`http://${deviceIP}/getData`);
+      setLoading(false);
+      setData(responce.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -52,81 +73,76 @@ const IndividualDeviceScreen = props => {
         title={deviceName}
         onPress={props.navigation}
       />
-      <ScrollView>
-        <DisplayContainer responce={data} />
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            title="Water Control"
-            onPress={() => {
-              props.navigation.navigate('TimeSettingScreen', {
-                deviceIP: deviceIP,
-                title: 'Spray',
-                name: 'Water Time Settings',
-                setting: 'spray',
-              });
-            }}
-            icon={true}
-            nameIcon="water"
+      {loading ? (
+        <LoadingComponent />
+      ) : (
+        <ScrollView>
+          <DisplayContainer responce={data} />
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title="Water Control"
+              onPress={() => {
+                props.navigation.navigate('TimeSettingScreen', {
+                  deviceIP: deviceIP,
+                  title: 'Spray',
+                  name: 'Water Time Settings',
+                  setting: 'spray',
+                });
+              }}
+              icon={true}
+              nameIcon="water"
+            />
+            <CustomButton
+              title="Fan Control"
+              onPress={() => {
+                props.navigation.navigate('TimeSettingScreen', {
+                  deviceIP: deviceIP,
+                  title: 'Fan',
+                  name: 'Fan Time Settings',
+                  setting: 'fan',
+                });
+              }}
+              icon={true}
+              nameIcon="fan"
+            />
+            <CustomButton
+              title="Light Control"
+              onPress={() => {
+                props.navigation.navigate('TimeSettingScreen', {
+                  deviceIP: deviceIP,
+                  title: 'Light',
+                  name: 'Light Time Settings',
+                  setting: 'light',
+                });
+              }}
+              icon={true}
+              nameIcon="lightbulb-on"
+            />
+            <CustomButton title="Reset System" icon={true} nameIcon="reload" />
+          </View>
+          <TimeUpdateContainer
+            title="Light Time Update"
+            onTitle="Last Light ON"
+            onValue={data.lightOnTime}
+            offTitle="Last Light OFF"
+            offValue={data.lightOffTime}
           />
-          <CustomButton
-            title="Fan Control"
-            onPress={() => {
-              props.navigation.navigate('TimeSettingScreen', {
-                deviceIP: deviceIP,
-                title: 'Fan',
-                name: 'Fan Time Settings',
-                setting: 'fan',
-              });
-            }}
-            icon={true}
-            nameIcon="fan"
+          <TimeUpdateContainer
+            title="Fan Time Update"
+            onTitle="Last Fan ON"
+            onValue={data.fanOnTime}
+            offTitle="Last Fan OFF"
+            offValue={data.fanOffTime}
           />
-          <CustomButton
-            title="Light Control"
-            onPress={() => {
-              props.navigation.navigate('TimeSettingScreen', {
-                deviceIP: deviceIP,
-                title: 'Light',
-                name: 'Light Time Settings',
-                setting: 'light',
-              });
-            }}
-            icon={true}
-            nameIcon="lightbulb-on"
+          <TimeUpdateContainer
+            title="Water Time Update"
+            onTitle="Last Water ON"
+            onValue={data.waterOnTime}
+            offTitle="Last Water OFF"
+            offValue={data.waterOffTime}
           />
-          <CustomButton
-            title="Reset System"
-            // onPress={() => {
-            //   props.navigation.navigate('TimeSettingScreen', {
-            //     name: 'Fan Time Settings',
-            //   });
-            // }}
-            icon={true}
-            nameIcon="reload"
-          />
-        </View>
-        <TimeUpdateContainer
-          title="Light Time Update"
-          onTitle="Last Light ON"
-          onValue={data.lightOnTime}
-          offTitle="Last Light OFF"
-          offValue={data.lightOffTime}
-        />
-        <TimeUpdateContainer
-          title="Fan Time Update"
-          onTitle="Last Fan ON"
-          onValue={data.fanOnTime}
-          offTitle="Last Fan OFF"
-          offValue={data.fanOffTime}
-        />
-        <TimeUpdateContainer
-          title="Water Time Update"
-          onTitle="Last Water ON"
-          onValue={data.waterOnTime}
-          offTitle="Last Water OFF"
-          offValue={data.waterOffTime}
-        />
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -148,5 +164,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flexWrap: 'wrap',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
