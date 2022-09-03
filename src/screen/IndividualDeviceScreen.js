@@ -52,6 +52,7 @@ const IndividualDeviceScreen = props => {
     try {
       const responce = await axios.get(`http://${deviceIP}/getData`);
       setLoading(false);
+      // responce = responce.json();
       setData(responce.data);
     } catch (error) {
       console.log(error);
