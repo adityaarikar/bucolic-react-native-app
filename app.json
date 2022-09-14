@@ -1,4 +1,12 @@
 {
   "name": "Bucolic",
-  "displayName": "Bucolic"
+  "displayName": "Bucolic",
+  "plugins": [
+    [
+      "react-native-wifi-reborn",
+      {
+        "fineLocationPermission": false
+      }
+    ]
+  ]
 }

@@ -13,6 +13,7 @@ import com.bucolic.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.reactlibrary.rnwifi.RNWifiPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -29,6 +30,10 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          // new VectorIconsPackage();
+          // packages.add(new VectorIconsPackage());
+          // packages.add(new RNWifiPackage());
+          // new RNWifiPackage();
           new VectorIconsPackage();
           return packages;
         }

@@ -1,11 +1,10 @@
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
-  Button,
   Alert,
   Image,
+  PermissionsAndroid,
 } from 'react-native';
 import React from 'react';
 import {useState} from 'react';
@@ -15,6 +14,8 @@ import CustomHeader from '../components/CustomHeader';
 import CustomButton from '../components/CustomButton';
 import constants from '../constants';
 import InputSelect from '../components/InputSelect';
+import {useEffect} from 'react';
+// import WifiManager from 'react-native-wifi-reborn';
 
 const data = [
   {label: 'Mushroom Garden', value: 'Mushroom'},
@@ -26,7 +27,36 @@ const AddDeviceScreen = props => {
   const [deviceIP, setDeviceIP] = useState('');
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
+
+  const requestPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  useEffect(() => {
+    requestPermission();
+  }, []);
 
   const showAlert = () =>
     Alert.alert(
@@ -41,10 +71,11 @@ const AddDeviceScreen = props => {
     );
 
   const addDeviceHandler = () => {
+    console.log('Device Name : ', deviceName + ' Device IP : ', deviceIP);
     dispatch(
       addDevice({
         deviceName: deviceName,
-        deviceIP: deviceIP,
+        deviceIP: '192.168.4.1',
         deviceType: value,
       }),
     );
@@ -52,6 +83,7 @@ const AddDeviceScreen = props => {
     setDeviceIP('');
     setValue(null);
     showAlert();
+    // if()
   };
 
   return (
@@ -72,12 +104,9 @@ const AddDeviceScreen = props => {
           value={deviceName}
           placeholder="Device Name"
         />
-        <TextInput
-          style={styles.input}
-          onChangeText={setDeviceIP}
-          value={deviceIP}
-          placeholder="0.0.0.0"
-          keyboardType="numeric"
+        <CustomButton
+          title="Configure Device"
+          onPress={() => props.navigation.navigate('ConfigureDeviceScreen')}
         />
         <InputSelect
           data={data}
@@ -97,7 +126,7 @@ export default AddDeviceScreen;
 const styles = StyleSheet.create({
   inputComponent: {
     alignSelf: 'center',
-    width: '80%',
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

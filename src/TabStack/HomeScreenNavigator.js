@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screen/HomeScreen';
 import AddDeviceScreen from '../screen/AddDeviceScreen';
+import ConfigureDeviceScreen from '../screen/ConfigureDeviceScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,14 @@ const HomeScreenNavigator = () => {
       <Stack.Screen
         name="AddDeviceScreen"
         component={AddDeviceScreen}
+        options={{
+          tabBarShowLabel: false,
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ConfigureDeviceScreen"
+        component={ConfigureDeviceScreen}
         options={{
           tabBarShowLabel: false,
           headerShown: false,
