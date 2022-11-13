@@ -1,9 +1,26 @@
 import {View, Text, StyleSheet, Button, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import constants from '../constants';
 import CustomButton from '../components/CustomButton';
 
 const HomeScreen = ({navigation}) => {
+  const [time, setTime] = useState(null);
+  useEffect(() => {
+    let time = getCurrentTime();
+    setTime(time);
+  }, []);
+  const getCurrentTime = () => {
+    let today = new Date();
+    let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
+    let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+    let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
+
+    let upset = (12 - hours) * 1000 * 60 * 60 + (60 - minutes) * 1000 * 60;
+    console.log(upset);
+
+    return hours + ':' + minutes + ':' + seconds;
+  };
+
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -36,9 +53,7 @@ const HomeScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   main: {
-    // backgroundColor: 'grey',
-    // width: '100%',
-    // height: '100%',
+    // color: constants.black,
     display: 'flex',
     alignItems: 'center',
   },

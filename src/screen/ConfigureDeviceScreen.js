@@ -9,6 +9,7 @@ import CustomButton from '../components/CustomButton';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const ConfigureDeviceScreen = props => {
+  const [wifiIsOn, setWifiIsOn] = useState(false);
   const [connected, setConnected] = useState(false);
   const [wifiList, setWifiList] = useState([]);
   const [isSystemPresent, setIsSystemPresent] = useState(false);
@@ -18,6 +19,7 @@ const ConfigureDeviceScreen = props => {
   const buttonTextStyle = {
     color: '#393939',
   };
+
   const DisplayWifiList = props => {
     if (
       props.item.SSID === 'Mushroom Garden' ||
@@ -42,7 +44,7 @@ const ConfigureDeviceScreen = props => {
     console.log('wifi on');
     WifiManager.setEnabled(true);
     WifiManager.isEnabled().then(status => {
-      setConnected(status);
+      setWifiIsOn(status);
     });
   };
 
@@ -55,10 +57,10 @@ const ConfigureDeviceScreen = props => {
   const ConnectToIoTDevice = () => {
     WifiManager.connectToProtectedSSID(ssidName, password, false).then(
       () => {
-        console.log('Connected successfully!');
+        setConnected(true);
       },
       () => {
-        console.log('Connection failed!');
+        setConnected(false);
       },
     );
   };
@@ -87,7 +89,7 @@ const ConfigureDeviceScreen = props => {
                 Please cleck on to the wifi sign and turn on the wifi.
               </Text>
               <TouchableOpacity onPress={() => wifiOn()}>
-                {connected ? (
+                {wifiIsOn ? (
                   <Icon
                     name="wifi-arrow-up-down"
                     color={constants.primary}
@@ -97,55 +99,64 @@ const ConfigureDeviceScreen = props => {
                   <Icon name="wifi-off" color={constants.black} size={100} />
                 )}
               </TouchableOpacity>
-              {connected ? <Text>Wifi On</Text> : <Text>Wifi Off</Text>}
+              {wifiIsOn ? <Text>Wifi On</Text> : <Text>Wifi Off</Text>}
             </View>
           </ProgressStep>
           <ProgressStep
             label="Second Step"
             nextBtnTextStyle={buttonTextStyle}
             previousBtnTextStyle={buttonTextStyle}>
-            <View style={{alignItems: 'center'}}>
-              <Text>Click on refresh button to load the wifi available...</Text>
-              <View style={styles.wifiContainer}>
-                <View
-                  style={{
-                    width: '100%',
-                    height: 50,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: 30,
-                    backgroundColor: constants.primary,
-                    borderRadius: 10,
-                  }}>
-                  <Text>Available Networks</Text>
-                  <TouchableOpacity onPress={() => getWifiList()}>
-                    <Icon name="refresh" color={constants.black} size={25} />
-                  </TouchableOpacity>
-                </View>
-                <ScrollView style={styles.listView}>
-                  {Object.keys(wifiList).length == 0 ? (
-                    <Text>No wifi Network Found</Text>
-                  ) : (
-                    <FlatList
-                      data={wifiList}
-                      keyExtractor={wifi => wifi.BSSID}
-                      renderItem={DisplayWifiList}
-                    />
-                  )}
-                </ScrollView>
-              </View>
-
+            {connected ? (
               <View>
-                {isSystemPresent ? (
-                  <CustomButton
-                    title="Connect to IoT Device"
-                    onPress={() => ConnectToIoTDevice()}
-                  />
-                ) : null}
+                <Text>Your device is been configured.</Text>
+                <Text>Click on next and verify your connection..</Text>
               </View>
-            </View>
+            ) : (
+              <View style={{alignItems: 'center'}}>
+                <Text>
+                  Click on refresh button to load the wifi available...
+                </Text>
+                <View style={styles.wifiContainer}>
+                  <View
+                    style={{
+                      width: '100%',
+                      height: 50,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 30,
+                      backgroundColor: constants.primary,
+                      borderRadius: 10,
+                    }}>
+                    <Text>Available Networks</Text>
+                    <TouchableOpacity onPress={() => getWifiList()}>
+                      <Icon name="refresh" color={constants.black} size={25} />
+                    </TouchableOpacity>
+                  </View>
+                  <ScrollView style={styles.listView}>
+                    {Object.keys(wifiList).length == 0 ? (
+                      <Text>No wifi Network Found</Text>
+                    ) : (
+                      <FlatList
+                        data={wifiList}
+                        keyExtractor={wifi => wifi.BSSID}
+                        renderItem={DisplayWifiList}
+                      />
+                    )}
+                  </ScrollView>
+                </View>
+
+                <View>
+                  {isSystemPresent ? (
+                    <CustomButton
+                      title="Connect to IoT Device"
+                      onPress={() => ConnectToIoTDevice()}
+                    />
+                  ) : null}
+                </View>
+              </View>
+            )}
           </ProgressStep>
           <ProgressStep
             label="Third Step"

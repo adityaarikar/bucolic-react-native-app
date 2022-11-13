@@ -1,4 +1,12 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Switch,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import constants from './../constants';
 import CustomHeader from '../components/CustomHeader';
@@ -11,61 +19,55 @@ const TimeSettingScreen = props => {
   const [isOnFocus, setIsOnFocus] = useState(false);
   const [offValue, setOFFValue] = useState(null);
   const [isOFFFocus, setIsOFFFocus] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [properConnection, setProperConnection] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   let onTime;
   let offTime;
 
   if (props.route.params.setting === 'spray') {
     onTime = [
-      {label: '5000', value: '5000'},
-      {label: '8000', value: '8000'},
-      {label: '12000', value: '12000'},
+      {label: '5 Seconds', value: '5000'},
+      {label: '8 Seconds', value: '8000'},
+      {label: '12 Seconds', value: '12000'},
     ];
 
     offTime = [
-      {label: '30000', value: '30000'},
-      {label: '45000', value: '45000'},
-      {label: '60000', value: '60000'},
+      {label: '30 Minutes', value: '1800000'},
+      {label: '45 Minutes', value: '2700000'},
+      {label: '60 Minutes', value: '3600000'},
     ];
   } else if (props.route.params.setting === 'fan') {
     onTime = [
-      {label: '5000', value: '5000'},
-      {label: '8000', value: '8000'},
-      {label: '12000', value: '12000'},
+      {label: '5 Seconds', value: '5000'},
+      {label: '8 Seconds', value: '8000'},
+      {label: '12 Seconds', value: '12000'},
     ];
 
     offTime = [
-      {label: '30000', value: '30000'},
-      {label: '45000', value: '45000'},
-      {label: '60000', value: '60000'},
+      {label: '30 Minutes', value: '1800000'},
+      {label: '45 Minutes', value: '2700000'},
+      {label: '60 Minutes', value: '3600000'},
     ];
   } else if (props.route.params.setting === 'light') {
     onTime = [
-      {label: '5000', value: '5000'},
-      {label: '8000', value: '8000'},
-      {label: '12000', value: '12000'},
+      {label: '5 Seconds', value: '5000'},
+      {label: '8 Seconds', value: '8000'},
+      {label: '12 Seconds', value: '12000'},
     ];
 
     offTime = [
-      {label: '30000', value: '30000'},
-      {label: '45000', value: '45000'},
-      {label: '60000', value: '60000'},
+      {label: '30 Minutes', value: '1800000'},
+      {label: '45 Minutes', value: '2700000'},
+      {label: '60 Minutes', value: '3600000'},
     ];
   }
 
-  const toggleDevice = index => {
-    if (index == 2) {
-      fetch(
-        `http://${props.route.params.deviceIP}/${props.route.params.setting}` +
-          `off`,
-      );
-    } else {
-      fetch(
-        `http://${props.route.params.deviceIP}/${props.route.params.setting}` +
-          `on`,
-      );
-    }
-    props.route.params.setUpdate(!props.route.params.update);
+  const toggleDevice = async index => {
+    console.log('Device state changed');
   };
 
   const sendDataHandler = () => {
@@ -82,6 +84,7 @@ const TimeSettingScreen = props => {
         `http://${props.route.params.deviceIP}/lightTimeSetting?lightOn=${onValue}&lightOff=${offValue}`,
       );
     }
+    ToastAndroid.show('Time Setting Done...!', ToastAndroid.SHORT);
   };
 
   return (
@@ -99,6 +102,8 @@ const TimeSettingScreen = props => {
           option1={'ON'}
           option2={'OFF'}
           onSelectSwitch={toggleDevice}
+          deviceIP={props.route.params.deviceIP}
+          setting={props.route.params.setting}
           selectionColor={constants.primary}
         />
       </View>
@@ -201,5 +206,40 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 24,
     fontWeight: '600',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });

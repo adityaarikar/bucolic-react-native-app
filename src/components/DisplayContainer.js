@@ -22,7 +22,7 @@ const DisplayContainer = props => {
           <ReadingDisplay title="Air Quality" value={props.responce.airQual} />
         </View>
         <LineBreak />
-        <LevelReading />
+        <LevelReading waterL={props.responce.waterL} />
         <LineBreak />
         <TimingDisplay
           fanOn={props.responce.fanOn}

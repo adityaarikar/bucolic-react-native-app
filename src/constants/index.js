@@ -3,6 +3,7 @@ const constants = {
   secondary: '#b3ffb3',
   remove: '#ff3333',
   black: '#000000',
+  white: '#ffffff',
 };
 
 export default constants;

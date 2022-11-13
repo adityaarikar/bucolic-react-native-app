@@ -44,6 +44,7 @@ const DeviceList = props => {
           props.navigation.navigate('IndividualDeviceScreen', {
             deviceIP: device.deviceIP,
             deviceName: device.deviceName,
+            deviceType: device.deviceType,
           })
         }>
         {device.deviceType === 'Mushroom' ? (

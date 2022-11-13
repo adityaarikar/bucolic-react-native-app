@@ -15,7 +15,6 @@ import CustomButton from '../components/CustomButton';
 import constants from '../constants';
 import InputSelect from '../components/InputSelect';
 import {useEffect} from 'react';
-// import WifiManager from 'react-native-wifi-reborn';
 
 const data = [
   {label: 'Mushroom Garden', value: 'Mushroom'},
@@ -64,14 +63,13 @@ const AddDeviceScreen = props => {
       'Your device is successfully added to your dashboard.',
       [
         {
-          text: 'Cancel',
+          text: 'Done',
           style: 'cancel',
         },
       ],
     );
 
   const addDeviceHandler = () => {
-    console.log('Device Name : ', deviceName + ' Device IP : ', deviceIP);
     dispatch(
       addDevice({
         deviceName: deviceName,
@@ -83,7 +81,6 @@ const AddDeviceScreen = props => {
     setDeviceIP('');
     setValue(null);
     showAlert();
-    // if()
   };
 
   return (

@@ -3,11 +3,11 @@ import React from 'react';
 import {Bar} from 'react-native-progress';
 import constants from '../constants';
 
-const LevelReading = () => {
+const LevelReading = props => {
   return (
     <View style={styles.levelReading}>
       <Text style={styles.title}>Water Level</Text>
-      <Bar progress={0.3} color={constants.primary} />
+      <Bar progress={props.waterL} color={constants.primary} />
     </View>
   );
 };
